@@ -35,7 +35,7 @@ export default function Login() {
     });
     if (res.status === 200) {
       login.login();
-      navigate("/admin/")
+      navigate("/admin/adminNavigation")
     } else {
       setShow(true)
     }

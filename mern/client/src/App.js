@@ -11,6 +11,8 @@ import Create from "./components/create";
 import Login from "./components/login"
 import PrivateRoutes from "./components/privateRoutes";
 import MainPage from "./components/mainPage";
+import AdminNavigation from "./components/adminNavigation";
+import TransactionList from "./components/transactionList";
 
 const App = () => {
   return (
@@ -21,9 +23,11 @@ const App = () => {
         <Route path="/" element={<MainPage />} exact />
         <Route path="/admin/login" element={<Login />} />
           <Route element={<PrivateRoutes/>}>
+            <Route path="/admin/adminNavigation" element={<AdminNavigation />} />
             <Route path="/admin/" element={<RecordList />} />
             <Route path="/admin/edit/:id" element={<Edit />} />
             <Route path="/admin/create" element={<Create />} />
+            <Route path="/admin/transactionList" element={<TransactionList />} />
           </Route>
         </Routes>
       </div>
