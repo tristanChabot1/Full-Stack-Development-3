@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import Alert from 'react-bootstrap/Alert';
 const login = require("../utils")
 
 // These methods will update the state properties.
@@ -15,6 +16,7 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const [show, setShow] = useState(false);
   const navigate = useNavigate();
   // This function will handle the submission.
   async function onSubmit(e) {
@@ -34,12 +36,20 @@ export default function Login() {
     if (res.status === 200) {
       login.login();
       navigate("/admin/")
-    } else {alert("Bad email or password.")}
+    } else {
+      setShow(true)
+    }
     
   }
   // This following section will display the form that takes the input from the user.
   return (
     <div>
+      <Alert variant="danger" show={show} onClose={() => setShow(false)} dismissible>
+        <Alert.Heading>Bad Email or Password</Alert.Heading>
+        <p>
+          Make sure you entered the right Email or Password!
+        </p>
+      </Alert>
       <h3>Enter Login Information</h3>
       <form onSubmit={onSubmit}>
         <div className="form-group">
