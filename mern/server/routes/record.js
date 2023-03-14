@@ -110,4 +110,17 @@ recordRoutes.route("/admin/:id").delete((req, response) => {
   });
 });
 
+// This section will help you create a new session token.
+recordRoutes.route("/admin/session/add").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myobj = {
+    email: req.body.email,
+    password: req.body.password,
+  };
+  db_connect.collection("session").insertOne(myobj, function (err, res) {
+    if (err) throw err;
+    response.json(res);
+  });
+});
+
 module.exports = recordRoutes;

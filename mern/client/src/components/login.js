@@ -21,7 +21,7 @@ export default function Login() {
   // This function will handle the submission.
   async function onSubmit(e) {
     e.preventDefault();
-    // When a post request is sent to the create url, we'll add a new age to the database.
+    // Login by looking for email and password in database
     const newLogin = { ...form };
     const res = await fetch("http://localhost:5000/admin/record/login", {
       method: "POST",
@@ -34,6 +34,20 @@ export default function Login() {
       return
     });
     if (res.status === 200) {
+      // inserting in database SESSION
+      await fetch("http://localhost:5000/admin/session/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newLogin),
+      })
+      .catch(error => {
+        window.alert(error);
+        return;
+      });
+      setForm({ email: "", password: "" });  
+
       login.login();
       navigate("/admin/adminNavigation")
     } else {

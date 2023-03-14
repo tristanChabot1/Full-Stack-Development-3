@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import ModalReact from './modal';
+
+
 export default function Create() {
   const [form, setForm] = useState({
     first_name: "",
@@ -20,7 +23,6 @@ export default function Create() {
   }
   // This function will handle the submission.
   async function onSubmit(e) {
-    e.preventDefault();
     // When a post request is sent to the create url, we'll add a new record to the database.
     const newPerson = { ...form };
     await fetch("http://localhost:5000/admin/record/add", {
@@ -41,7 +43,9 @@ export default function Create() {
   return (
     <div>
       <h3>Create New Agent</h3>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={(e) => {
+        e.preventDefault();
+      }}>
         {/* First name */}
         <div className="form-group">
           <label htmlFor="first_name">First name</label>
@@ -176,11 +180,16 @@ export default function Create() {
           </select>
         </div>
         <div className="form-group">
-          <input
-            type="submit"
-            value="Create person"
-            className="btn btn-primary"
-          />
+          <ModalReact
+            buttonText = "Confirm Create"
+            buttonTextColor = "blue"
+            title = {`Confirm Create`}
+            message = {`Are you sure you want to Create ${form.first_name} ${form.last_name}`}
+            confirmText = "Yes! Create it!"
+            onConfirm={() => {
+              onSubmit()
+              }}
+            />
         </div>
       </form>
     </div>

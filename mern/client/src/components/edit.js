@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
+import ModalReact from './modal';
+
 
 export default function Edit() {
   const [form, setForm] = useState({
@@ -50,7 +52,6 @@ export default function Edit() {
   }
 
   async function onSubmit(e) {
-    e.preventDefault();
     const editedPerson = {
       first_name: form.first_name,
       last_name: form.last_name,
@@ -78,7 +79,9 @@ export default function Edit() {
   return (
     <div>
       <h3>Update Record</h3>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={(e) => {
+        e.preventDefault();
+      }}>
         {/* First name */}
         <div className="form-group">
           <label htmlFor="first_name">First name</label>
@@ -213,10 +216,15 @@ export default function Edit() {
           </select>
         </div>
         <div className="form-group">
-          <input
-            type="submit"
-            value="Confirm Edit"
-            className="btn btn-primary"
+          <ModalReact
+          buttonText = "Confirm Edit"
+          buttonTextColor = "blue"
+          title = {`Confirm Edit`}
+          message = {`Are you sure you want to edit ${form.first_name} ${form.last_name}`}
+          confirmText = "Yes! Edit it!"
+          onConfirm={() => {
+            onSubmit()
+            }}
           />
         </div>
       </form>
