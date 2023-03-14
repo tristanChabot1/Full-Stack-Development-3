@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import ModalReact from './modal';
 
 const Record = (props) => (
   <tr>
@@ -14,16 +14,17 @@ const Record = (props) => (
     <td>{props.record.manager ? 'manager' : 'employee'}</td>
     <td>
       <Link className="btn btn-link" to={`/admin/edit/${props.record._id}`}>Edit</Link> |
-      <button className="btn btn-link"
-        onClick={() => {
-          props.deleteRecord(props.record._id);
-        }}
-      >
-        Delete
-      </button>
+      <ModalReact
+        buttonText = "Delete"
+        title = {`Confirm deletion`}
+        message = {`Are you sure you want to delete ${props.record.first_name} ${props.record.last_name}`}
+        confirmText = "Yes! Delete it!"
+        onConfirm = {() => props.deleteRecord(props.record._id)}
+      />
     </td>
   </tr>
 );
+
 
 export default function RecordList() {
   const [records, setRecords] = useState([]);
@@ -48,10 +49,12 @@ export default function RecordList() {
     return; 
   }, [records.length]);
 
+  
   // This method will delete a record
   async function deleteRecord(id) {
+    console.log('Delete action performing')
     await fetch(`http://localhost:5000/admin/${id}`, {
-      method: "DELETE"
+    method: "DELETE"
     });
 
     const newRecords = records.filter((el) => el._id !== id);
@@ -65,12 +68,13 @@ export default function RecordList() {
         <Record
           record={record}
           deleteRecord={() => deleteRecord(record._id)}
+          // display={() => display(record._id)}
           key={record._id}
         />
       );
     });
   }
-
+  
   // This following section will display the table with the records of individuals.
   return (
     <div>
