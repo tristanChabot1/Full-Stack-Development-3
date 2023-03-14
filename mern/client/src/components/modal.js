@@ -2,22 +2,22 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
+
 function ModalReact(props) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const buttonStyle = { color: props.buttonTextColor, border: "0px", background: "transparent" }
+
   const handleConfirm = () => {
     props.onConfirm();
     handleClose();
   };
-
-  const buttonStyle = { color: props.buttonTextColor, border: "0px", background: "transparent" }
-
   return (
     <>
-      <button variant="link" style={buttonStyle} onClick={handleShow}>
+      <button variant="button" style={buttonStyle} onClick={handleShow}>
         {props.buttonText}
       </button>
 

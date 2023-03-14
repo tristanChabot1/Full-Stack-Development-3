@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ModalReact from './modal';
 
 const Record = (props) => (
@@ -13,10 +13,10 @@ const Record = (props) => (
     <td>{props.record.sales + '$'}</td>
     <td>{props.record.manager ? 'manager' : 'employee'}</td>
     <td>
-      <Link className="btn btn-link" to={`/admin/edit/${props.record._id}`}>Edit</Link> |
-      <ModalReact
+    <Link className="btn btn-link" to={`/admin/edit/${props.record._id}`}>Edit</Link> |
+    <ModalReact
         buttonText = "Delete"
-        title = {`Confirm deletion`}
+        title = {`Confirm Deletion`}
         message = {`Are you sure you want to delete ${props.record.first_name} ${props.record.last_name}`}
         confirmText = "Yes! Delete it!"
         onConfirm = {() => props.deleteRecord(props.record._id)}
@@ -27,6 +27,7 @@ const Record = (props) => (
 
 
 export default function RecordList() {
+  const navigate = useNavigate();
   const [records, setRecords] = useState([]);
 
   // This method fetches the records from the database.
