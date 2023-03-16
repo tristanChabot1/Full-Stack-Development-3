@@ -4,7 +4,6 @@ import Alert from 'react-bootstrap/Alert';
 import Cookies from 'js-cookie'
 
 const { v4: uuidv4 } = require('uuid');
-// const login = require("../utils")
 
 
 // These methods will update the state properties.
