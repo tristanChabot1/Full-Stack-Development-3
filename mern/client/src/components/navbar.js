@@ -48,6 +48,11 @@ export default function Navbar() {
                 Create Agent
               </NavLink>
             </li>
+            <li className="nav-item btn-sm btn-secondary" style={{margin: "5px"}}>
+              <NavLink className="nav-link" to="/admin/transaction">
+                Create Transaction
+              </NavLink>
+            </li>
           </ul>
         </div>
       </nav>

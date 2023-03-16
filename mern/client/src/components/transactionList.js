@@ -23,7 +23,7 @@ const Record = (props) => (
 
 export default function TransactionList() {
   const navigate = useNavigate();
-  const [records, setRecords] = useState([]);
+  const [transactionRecords, setRecords] = useState([]);
 
   // This method fetches the records from the database.
   useEffect(() => {
@@ -36,14 +36,14 @@ export default function TransactionList() {
         return;
       }
 
-      const records = await response.json();
-      setRecords(records);
+      const data = await response.json();
+      setRecords(data.transactions);
     }
 
     getRecords();
 
     return; 
-  }, [records.length]);
+  }, [transactionRecords.length]);
 
   
   // This method will delete a record
@@ -53,13 +53,13 @@ export default function TransactionList() {
     method: "DELETE"
     });
 
-    const newRecords = records.filter((el) => el._id !== id);
+    const newRecords = transactionRecords.filter((el) => el._id !== id);
     setRecords(newRecords);
   }
 
   // This method will map out the records on the table
   function recordList() {
-    return records.map((record) => {
+    return transactionRecords.map((record) => {
       return (
         <Record
           record={record}

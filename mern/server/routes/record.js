@@ -33,7 +33,7 @@ recordRoutes.route("/admin/record/login").post(async function  (req, response) {
   }
 });
 
-// This section will help you get a list of all the records.
+// This section will help you get a list of all the agents.
 recordRoutes.route("/admin/record").get(function (req, res) {
   let db_connect = dbo.getDb("people");
   db_connect
@@ -172,9 +172,10 @@ recordRoutes.route("/admin/get_token").get(function (req, res) {
     });
 });
 
-// This section will help you get a list of all the transaction list.
+// This section will help you get a list of 10 most recent transactions.
 recordRoutes.route("/admin/transaction-data").get(function (req, res) {
   let db_connect = dbo.getDb("people");
+  let data = {};
   db_connect
     .collection("transactions")
     .find({})
@@ -191,8 +192,31 @@ recordRoutes.route("/admin/transaction-data").get(function (req, res) {
         let dateObj = new Date(year, month-1, day);
         transaction.date = dateObj.toLocaleDateString();
       });
-      res.json(result);
+      data["transactions"] = result
+
+      db_connect
+      .collection("agents")
+      .find({})
+      .toArray(function (err, result) {
+        if (err) throw err;
+        data["agents"] = result;
+        res.json(data);
+      });
     });
+});
+
+// This section will help you create a new transaction.
+recordRoutes.route("/admin/transaction").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myobj = {
+    date: +req.body.date,
+    transaction: req.body.transaction,
+    name: req.body.name,
+  };
+  db_connect.collection("transactions").insertOne(myobj, function (err, res) {
+    if (err) throw err;
+    response.json(res);
+  });
 });
 
 module.exports = recordRoutes;

@@ -13,6 +13,7 @@ import PrivateRoutes from "./components/privateRoutes";
 import MainPage from "./components/mainPage";
 import AdminNavigation from "./components/adminNavigation";
 import TransactionList from "./components/transactionList";
+import Transaction from "./components/createTransaction";
 import { isLoggedIn } from "./utils";
 
 
@@ -35,6 +36,7 @@ useEffect(() => {
             <Route path="/admin/" element={<RecordList />} />
             <Route path="/admin/edit/:id" element={<Edit />} />
             <Route path="/admin/create" element={<Create />} />
+            <Route path="/admin/transaction" element={<Transaction />} />
             <Route path="/admin/transactionList" element={<TransactionList />} />
           </Route>
         </Routes>
