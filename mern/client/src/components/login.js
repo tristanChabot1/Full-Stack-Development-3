@@ -18,7 +18,7 @@ const updateForm = (setForm) => (event) => {
 export let SESSION_TOKEN = uuidv4()
 
 //Settting COOKIE with the same session token
-const expires = new Date(Date.now() + 30 * 1000)
+const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
 const login = (TOKEN_KEY) => Cookies.set(TOKEN_KEY, 'token_key', { expires });
 
 function Login() {
@@ -45,14 +45,14 @@ function Login() {
     });
     if (res.status === 200) { // if OK
       // getting first_name, last_name, id
-      let data1 = {}; // Initialize data1 to an empty object
+      let newSession = {}; // Initialize newSession to an empty object
       await fetch(`http://localhost:5000/admin/login/${form.email}`, {
         method: "GET",
       })
       .then(response => response.json())
       .then(data => {
-        data1 = data
-        data1["token"] = SESSION_TOKEN
+        newSession = data
+        newSession["token"] = SESSION_TOKEN
       })
       .catch(error => {
         console.log(error)
@@ -64,7 +64,7 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data1),
+        body: JSON.stringify(newSession),
       })
       .catch(error => {
         window.alert(error);
@@ -72,7 +72,6 @@ function Login() {
       });
       setForm({ email: "", password: "" });
       login(SESSION_TOKEN)
-      // login.login();
       navigate("/admin/adminNavigation")
       } else {
       setShow(true)

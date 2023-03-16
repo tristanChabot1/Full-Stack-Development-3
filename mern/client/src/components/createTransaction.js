@@ -36,7 +36,7 @@ export default function CreateTransaction() {
 
 
   const [form, setForm] = useState({
-    transaction: Number,
+    amount: Number,
     name: "",
   });
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ export default function CreateTransaction() {
       window.alert(error);
       return;
     });
-    setForm({ transaction: "", name: "" });
+    setForm({ amount: "", name: "" });
     navigate("/admin/transactionList");
   }
   // This following section will display the form that takes the input from the user.
@@ -72,15 +72,16 @@ export default function CreateTransaction() {
       <form onSubmit={(e) => {
         e.preventDefault();
       }}>
-        {/* Transaction */}
+        {/* Amount */}
         <div className="form-group">
-          <label htmlFor="transaction">Transaction</label>
+          <label htmlFor="amount">Amount</label>
           <input
             type="number"
+            min="0"
             className="form-control"
-            id="transaction"
-            value={form.transaction}
-            onChange={(e) => updateForm({ transaction: e.target.value })}
+            id="amount"
+            value={form.amount}
+            onChange={(e) => updateForm({ amount: e.target.value })}
           />
         </div>
         {/* Name */}
@@ -100,7 +101,7 @@ export default function CreateTransaction() {
             buttonText = "Confirm Transaction"
             buttonTextColor = "blue"
             title = {`Confirm Transaction`}
-            message = {`Are you sure the transaction INFO are correct? Amount: ${form.transaction} Name: ${form.name}`}
+            message = {`Are you sure the transaction INFO are correct? Amount: ${form.amount} Name: ${form.name}`}
             confirmText = "Confirm"
             onConfirm={() => {
               onSubmit()

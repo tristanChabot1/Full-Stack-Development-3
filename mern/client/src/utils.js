@@ -10,21 +10,12 @@ export const isLoggedIn = () => {
         })
         .then(response => response.json())
         .then(data => {
-        //   console.log("data.status", data.status, "data.data.valid", data.data.valid, "Cookies.get(SESSION_TOKEN)", Cookies.get(SESSION_TOKEN))
+            console.log(data)
           if (data.status === "ok" && data.data.valid === true/* && Cookies.get(SESSION_TOKEN)*/) {
-              console.log('true!!!')
               resolve(true);
           } else {
-              console.log('false!!!')
               resolve(false);
           }
         })
     });
 };
-
-// export const isLoggedIn = () => {
-//     if (Cookies.get(SESSION_TOKEN)) {
-//         return true;
-//     }
-//     return true;
-// }

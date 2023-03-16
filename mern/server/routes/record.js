@@ -134,7 +134,7 @@ recordRoutes.route("/admin/session").post(function (req, response) {
     token: req.body.token,
     expiry: new Date(Date.now())
   };
-  db_connect.collection("session").createIndex({ "expiry": 1 }, { expireAfterSeconds: 20 });
+  db_connect.collection("session").createIndex({ "expiry": 1 }, { expireAfterSeconds: 86400 });
   db_connect.collection("session").insertOne(myobj, function (err, res) {
     if (err) throw err;
     response.json({ status: 'ok', data: { token: myobj.token }, message: 'session saved successfully' });
@@ -210,7 +210,7 @@ recordRoutes.route("/admin/transaction").post(function (req, response) {
   let db_connect = dbo.getDb();
   let myobj = {
     date: +req.body.date,
-    transaction: req.body.transaction,
+    amount: +req.body.amount,
     name: req.body.name,
   };
   db_connect.collection("transactions").insertOne(myobj, function (err, res) {
