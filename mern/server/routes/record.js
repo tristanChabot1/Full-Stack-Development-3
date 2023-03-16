@@ -15,7 +15,7 @@ const ObjectId = require("mongodb").ObjectId;
 
 
 
-// This section will help you get a list of all the records.
+// This section will login.
 recordRoutes.route("/admin/record/login").post(async function  (req, response) {
   try {
     let db_connect = dbo.getDb();
@@ -31,7 +31,8 @@ recordRoutes.route("/admin/record/login").post(async function  (req, response) {
   } catch (e) {
     return response.status(500).json({error: 'Something went wrong'});
   }
-}); 
+});
+
 // This section will help you get a list of all the records.
 recordRoutes.route("/admin/record").get(function (req, res) {
   let db_connect = dbo.getDb("people");
@@ -171,5 +172,27 @@ recordRoutes.route("/admin/get_token").get(function (req, res) {
     });
 });
 
+// This section will help you get a list of all the transaction list.
+recordRoutes.route("/admin/transaction-data").get(function (req, res) {
+  let db_connect = dbo.getDb("people");
+  db_connect
+    .collection("transactions")
+    .find({})
+    .sort({ date: -1 })
+    .limit(10)
+    .toArray(function (err, result) {
+      if (err) throw err;
+      result.forEach(transaction => {
+        let dateString = transaction.date.toString();
+        let year = dateString.substring(0,4);
+        let month = dateString.substring(4,6);
+        let day = dateString.substring(6,8);
+        
+        let dateObj = new Date(year, month-1, day);
+        transaction.date = dateObj.toLocaleDateString();
+      });
+      res.json(result);
+    });
+});
 
 module.exports = recordRoutes;

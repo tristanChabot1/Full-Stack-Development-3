@@ -19,7 +19,7 @@ const updateForm = (setForm) => (event) => {
 export let SESSION_TOKEN = uuidv4()
 
 //Settting COOKIE with the same session token
-const expires = new Date(Date.now() + 20 * 1000)
+const expires = new Date(Date.now() + 30 * 1000)
 const login = (TOKEN_KEY) => Cookies.set(TOKEN_KEY, 'token_key', { expires });
 
 function Login() {

@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // We use Route in order to define the different routes of our application
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 // We import all the components we need in our app
 import Navbar from "./components/navbar";
@@ -13,8 +13,16 @@ import PrivateRoutes from "./components/privateRoutes";
 import MainPage from "./components/mainPage";
 import AdminNavigation from "./components/adminNavigation";
 import TransactionList from "./components/transactionList";
+import { isLoggedIn } from "./utils";
+
+
 
 const App = () => {
+const location = useLocation();
+useEffect(() => {
+    isLoggedIn()
+    }, [location]);
+
   return (
     <div>
       <Navbar />
