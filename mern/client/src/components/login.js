@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Alert from 'react-bootstrap/Alert';
-const login = require("../utils")
+import Cookies from 'js-cookie'
+
+const { v4: uuidv4 } = require('uuid');
+// const login = require("../utils")
+
 
 // These methods will update the state properties.
 const updateForm = (setForm) => (event) => {
@@ -11,7 +15,14 @@ const updateForm = (setForm) => (event) => {
     [name]: value,
   }));
 };
-export default function Login() {
+
+export let SESSION_TOKEN = uuidv4()
+
+//Settting COOKIE with the same session token
+const expires = new Date(Date.now() + 20 * 1000)
+const login = (TOKEN_KEY) => Cookies.set(TOKEN_KEY, 'token_key', { expires });
+
+function Login() {
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -33,24 +44,38 @@ export default function Login() {
       window.alert(error);
       return
     });
-    if (res.status === 200) {
+    if (res.status === 200) { // if OK
+      // getting first_name, last_name, id
+      let data1 = {}; // Initialize data1 to an empty object
+      await fetch(`http://localhost:5000/admin/login/${form.email}`, {
+        method: "GET",
+      })
+      .then(response => response.json())
+      .then(data => {
+        data1 = data
+        data1["token"] = SESSION_TOKEN
+      })
+      .catch(error => {
+        console.log(error)
+      });
+      
       // inserting in database SESSION
-      await fetch("http://localhost:5000/admin/session/add", {
+      await fetch("http://localhost:5000/admin/session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newLogin),
+        body: JSON.stringify(data1),
       })
       .catch(error => {
         window.alert(error);
         return;
       });
-      setForm({ email: "", password: "" });  
-
-      login.login();
+      setForm({ email: "", password: "" });
+      login(SESSION_TOKEN)
+      // login.login();
       navigate("/admin/adminNavigation")
-    } else {
+      } else {
       setShow(true)
     }
     
@@ -99,3 +124,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default Login;

@@ -1,5 +1,6 @@
 const express = require("express");
 
+
 // recordRoutes is an instance of the express router.
 // We use it to define our routes.
 // The router will be added as a middleware and will take control of requests starting with path /record.
@@ -110,17 +111,65 @@ recordRoutes.route("/admin/:id").delete((req, response) => {
   });
 });
 
+// This section will help you get a single record by email
+recordRoutes.route("/admin/login/:email").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  let myquery = { email: req.params.email };
+  db_connect
+      .collection("login")
+      .findOne(myquery, function (err, result) {
+        if (err) throw err;
+        res.json(result);
+      });
+});
+
 // This section will help you create a new session token.
-recordRoutes.route("/admin/session/add").post(function (req, response) {
+recordRoutes.route("/admin/session").post(function (req, response) {
   let db_connect = dbo.getDb();
   let myobj = {
-    email: req.body.email,
-    password: req.body.password,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    _id: ObjectId(req.body._id),
+    token: req.body.token,
+    expiry: new Date(Date.now())
   };
+  db_connect.collection("session").createIndex({ "expiry": 1 }, { expireAfterSeconds: 20 });
   db_connect.collection("session").insertOne(myobj, function (err, res) {
     if (err) throw err;
-    response.json(res);
+    response.json({ status: 'ok', data: { token: myobj.token }, message: 'session saved successfully' });
   });
 });
+
+// This section will help you create a new session token.
+recordRoutes.route("/admin/validate_token").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  const token = req.query.token;
+  db_connect
+    .collection("session")
+    .findOne({token: token}, function (err, result) {
+      if (err) {
+        res.status(500).json({ status: "error", message: "Failed to validate token" });
+      } else {
+        if (result) {
+          res.json({status: "ok", data: {valid: true, user: result.user, message: null}});
+        } else {
+          res.json({status: "ok", data: {valid: false, user: null, message: "Invalid token"}});
+        }
+      }
+    });
+});
+
+// This section will help you create a new session token.
+recordRoutes.route("/admin/get_token").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  db_connect
+    .collection("session")
+    .find({})
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
 
 module.exports = recordRoutes;
