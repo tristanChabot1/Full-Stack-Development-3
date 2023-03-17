@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import ModalReact from './modal';
 
 const Record = (props) => (
@@ -79,7 +79,16 @@ export default function RecordList() {
   // This following section will display the table with the records of individuals.
   return (
     <div>
-      <h3>Agent List</h3>
+      <ul style={{ display: "flex", padding: "0px", listStyleType: "none" }}>
+        <li>
+          <h3>Agent List</h3>
+        </li>
+        <li style={{ position: "relative", left: "80%" }}>
+          <NavLink className="nav-link" to="/admin/create">
+            Create agent
+          </NavLink>
+        </li>
+      </ul>
       <table className="table table-striped" style={{ marginTop: 20 }}>
         <thead>
           <tr>

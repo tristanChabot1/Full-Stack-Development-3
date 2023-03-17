@@ -23,7 +23,7 @@ export default function CreateTransaction() {
       setAgentRecords(data.agents);
 
       const agentOptions = data.agents.map(agent => {
-        return <option key={agent.name} value={agent.name}>{agent.first_name} {agent.last_name}</option>
+        return <option key={agent.name} value={`${agent.first_name} ${agent.last_name}`}>{agent.first_name} {agent.last_name} | ID: {agent._id}</option>
       })
       setOptions(agentOptions);
     

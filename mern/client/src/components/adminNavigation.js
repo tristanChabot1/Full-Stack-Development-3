@@ -6,7 +6,7 @@ import Card from 'react-bootstrap/Card';
 export default function AdminNavigation() {
   return (
     <div>
-      <h1 style={{textAlign: "center"}}>Index</h1>
+      <h1 style={{textAlign: "center"}}>Home</h1>
       <hr />
       <div style={{display: "flex", justifyContent: "center", marginTop: "2rem"}}>
             <Card style={{ width: "25rem", marginRight: "5rem" }}>

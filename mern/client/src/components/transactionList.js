@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import ModalReact from './modal';
 
 const Record = (props) => (
   <tr>
@@ -53,9 +52,9 @@ export default function TransactionList() {
     <div>
       <ul style={{ display: "flex", padding: "0px", listStyleType: "none" }}>
         <li>
-          <h3>Agent List</h3>
+          <h3>Transaction List</h3>
         </li>
-        <li style={{ position: "relative", left: "80%" }}>
+        <li style={{ position: "relative", left: "75%" }}>
           <NavLink className="nav-link" to="/admin/transaction">
             Create Transaction
           </NavLink>

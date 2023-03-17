@@ -62,10 +62,12 @@ function Login() {
         newSession = data
         newSession["token"] = SESSION_TOKEN
         loginCookie(SESSION_TOKEN)
+        setCookie("name", newSession.first_name, {expires})
       })
       .catch(error => {
         console.log(error)
       });
+
       
       // inserting in database SESSION
       await fetch("http://localhost:5000/admin/session", {

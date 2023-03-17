@@ -32,8 +32,6 @@ const PrivateRoutes = () => {
       const token = await isLoggedIn();
       setIsValidToken(token);
     }, [pathname]);
-  
-    console.log(isValidToken)
     if (isValidToken === undefined) {
       return null;
     }
