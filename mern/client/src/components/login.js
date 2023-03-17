@@ -32,7 +32,7 @@ function Login() {
   const navigate = useNavigate();
 
   const loginCookie = (TOKEN_KEY) => {
-    setCookie("token_key", TOKEN_KEY)
+    setCookie("token_key", TOKEN_KEY, {expires})
   }  
   // This function will handle the submission.
   async function onSubmit(e) {

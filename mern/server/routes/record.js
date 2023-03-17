@@ -136,8 +136,8 @@ recordRoutes.route("/admin/session").post(function (req, response) {
   };
   db_connect.collection("session").createIndex({ "expiry": 1 }, { expireAfterSeconds: 86400 });
   db_connect.collection("session").updateOne(
-    { token: req.body.token },
-    { $set: myobj },
+    { first_name: req.body.first_name, last_name: req.body.last_name, _id: ObjectId(req.body._id) },
+    { $set: { token: req.body.token, expiry: new Date(Date.now()) } },
     { upsert: true }
   )
   response.json({ status: 'ok', data: { token: myobj.token }, message: 'session saved successfully' });
