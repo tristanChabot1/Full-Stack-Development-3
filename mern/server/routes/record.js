@@ -135,10 +135,12 @@ recordRoutes.route("/admin/session").post(function (req, response) {
     expiry: new Date(Date.now())
   };
   db_connect.collection("session").createIndex({ "expiry": 1 }, { expireAfterSeconds: 86400 });
-  db_connect.collection("session").insertOne(myobj, function (err, res) {
-    if (err) throw err;
-    response.json({ status: 'ok', data: { token: myobj.token }, message: 'session saved successfully' });
-  });
+  db_connect.collection("session").updateOne(
+    { token: req.body.token },
+    { $set: myobj },
+    { upsert: true }
+  )
+  response.json({ status: 'ok', data: { token: myobj.token }, message: 'session saved successfully' });
 });
 
 // This section will help you create a new session token.

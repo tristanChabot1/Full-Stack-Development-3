@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Alert from 'react-bootstrap/Alert';
-import Cookies from 'js-cookie'
+import {useCookies} from "react-cookie";
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -15,19 +15,25 @@ const updateForm = (setForm) => (event) => {
   }));
 };
 
-export let SESSION_TOKEN = uuidv4()
+let SESSION_TOKEN = uuidv4()
 
 //Settting COOKIE with the same session token
 const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
-const login = (TOKEN_KEY) => Cookies.set(TOKEN_KEY, 'token_key', { expires });
+// const loginCookie = (TOKEN_KEY) => Cookies.set(TOKEN_KEY, 'token_key', { expires });
 
 function Login() {
+  const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
   const [show, setShow] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
   const navigate = useNavigate();
+
+  const loginCookie = (TOKEN_KEY) => {
+    setCookie("token_key", TOKEN_KEY)
+  }  
   // This function will handle the submission.
   async function onSubmit(e) {
     e.preventDefault();
@@ -43,7 +49,9 @@ function Login() {
       window.alert(error);
       return
     });
-    if (res.status === 200) { // if OK
+    if (res.status === 200) {
+      setIsConnected(true);
+
       // getting first_name, last_name, id
       let newSession = {}; // Initialize newSession to an empty object
       await fetch(`http://localhost:5000/admin/login/${form.email}`, {
@@ -53,6 +61,7 @@ function Login() {
       .then(data => {
         newSession = data
         newSession["token"] = SESSION_TOKEN
+        loginCookie(SESSION_TOKEN)
       })
       .catch(error => {
         console.log(error)
@@ -71,13 +80,24 @@ function Login() {
         return;
       });
       setForm({ email: "", password: "" });
-      login(SESSION_TOKEN)
       navigate("/admin/adminNavigation")
       } else {
       setShow(true)
     }
     
   }
+
+  // useEffect(() => {
+  //   if (isConnected) {
+  //     const timer = setTimeout(() => {
+  //       window.location.reload();
+  //     }, 500);
+
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [isConnected]);
+
+
   // This following section will display the form that takes the input from the user.
   return (
     <div>

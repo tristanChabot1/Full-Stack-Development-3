@@ -14,11 +14,32 @@ import MainPage from "./components/mainPage";
 import AdminNavigation from "./components/adminNavigation";
 import TransactionList from "./components/transactionList";
 import Transaction from "./components/createTransaction";
-import { isLoggedIn } from "./utils";
+// import { isLoggedIn } from "./utils";
+import {useCookies} from "react-cookie";
+
 
 
 
 const App = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
+  const isLoggedIn = async () => {
+      const SESSION_TOKEN = cookies.token_key
+      console.log("SESSION_TOKEN", SESSION_TOKEN)
+        return new Promise((resolve, reject) => {
+        fetch(`http://localhost:5000/admin/validate_token?token=${SESSION_TOKEN}`, {
+            method: "GET",
+          })
+          .then(response => response.json())
+          .then(data => {
+              console.log(data)
+            if (data.status === "ok" && data.data.valid === true && cookies.token_key) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+          })
+      });
+  };
 const location = useLocation();
 useEffect(() => {
     isLoggedIn()

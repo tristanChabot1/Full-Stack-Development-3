@@ -1,16 +1,24 @@
 import React from "react";
+import {useCookies} from "react-cookie";
+
 
 // We import bootstrap to make our application look better.
 import "bootstrap/dist/css/bootstrap.css";
 
 // We import NavLink to utilize the react router.
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "./assets/rocketLogo.png"
 
 const { logout } = require("../utils")
 
 // Here, we display our Navbar
 export default function Navbar() {
+  const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
+  const navigate = useNavigate();
+  const logout = () => {
+    removeCookie("token_key");
+    navigate("/login")
+  }
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
