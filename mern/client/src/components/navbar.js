@@ -9,6 +9,7 @@ import logo from "./assets/rocketLogo.png"
 export default function Navbar() {
   const location = useLocation();
   const [show, setShow] = useState(false);
+  // setCookie needs to be there or removeCookie doesn't work properly
   const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
   const navigate = useNavigate();
   const logout = () => {
@@ -35,7 +36,7 @@ export default function Navbar() {
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <NavLink className="navbar-brand" to="/admin/adminNavigation" style={{"width" : 75 + '%', "height" : 100 + '%'}}>
-        <img style={{"width" : 25 + '%'}} src={logo}></img>
+        <img style={{"width" : 20 + '%'}} src={logo}></img>
         </NavLink>
         <button
           className="navbar-toggler"
@@ -51,24 +52,24 @@ export default function Navbar() {
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav ml-auto">
-            <li className="nav-item" style={{margin: "5px", display: show ? "block" : "none"}}>
+            <span class="navbar-text" style={{margin: "5px", textAlign: "center", display: show ? "block" : "none"}}>
               {`Welcome ${cookies.name}`}
+            </span>
+            <li className="nav-item btn-secondary" style={{margin: "5px", borderRadius: "5px", display: show ? "block" : "none"}}>
+              <NavLink className="nav-link" to="/admin/adminNavigation">
+                Home
+              </NavLink>
             </li>
-            <li className="nav-item btn-sm btn-primary" style={{margin: "5px"}}>
+            <li className="nav-item btn-primary" style={{margin: "5px", borderRadius: "5px"}}>
               <NavLink className="nav-link" to="/admin/login">
                 Log In
               </NavLink>
             </li>
-            <li className="nav-item btn-sm btn-danger" style={{margin: "5px"}}>
+            <li className="nav-item btn-danger" style={{margin: "5px", borderRadius: "5px"}}>
               <NavLink className="nav-link" to="/admin/login" onClick={() => {
                 logout();
               }}>
                 Log Out
-              </NavLink>
-            </li>
-            <li className="nav-item btn-sm btn-secondary" style={{margin: "5px"}}>
-              <NavLink className="nav-link" to="/admin/adminNavigation">
-                Home
               </NavLink>
             </li>
           </ul>

@@ -84,6 +84,7 @@ function Login() {
       setForm({ email: "", password: "" });
       setTimeout(() => {
         navigate("/admin/adminNavigation");
+        window.location.reload();
       }, 3000);
     } else {
       setShowError(true)
