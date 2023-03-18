@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Alert from 'react-bootstrap/Alert';
 import {useCookies} from "react-cookie";
@@ -19,7 +19,6 @@ let SESSION_TOKEN = uuidv4()
 
 //Settting COOKIE with the same session token
 const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
-// const loginCookie = (TOKEN_KEY) => Cookies.set(TOKEN_KEY, 'token_key', { expires });
 
 function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
@@ -27,16 +26,18 @@ function Login() {
     email: "",
     password: "",
   });
-  const [show, setShow] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const navigate = useNavigate();
 
   const loginCookie = (TOKEN_KEY) => {
     setCookie("token_key", TOKEN_KEY, {expires})
-  }  
+  }
+
   // This function will handle the submission.
   async function onSubmit(e) {
     e.preventDefault();
+
     // Login by looking for email and password in database
     const newLogin = { ...form };
     const res = await fetch("http://localhost:5000/admin/record/login", {
@@ -50,10 +51,10 @@ function Login() {
       return
     });
     if (res.status === 200) {
-      setIsConnected(true);
+      setShowSuccess(true)
 
-      // getting first_name, last_name, id
-      let newSession = {}; // Initialize newSession to an empty object
+      // getting first_name, last_name and id from database
+      let newSession = {};
       await fetch(`http://localhost:5000/admin/login/${form.email}`, {
         method: "GET",
       })
@@ -68,7 +69,6 @@ function Login() {
         console.log(error)
       });
 
-      
       // inserting in database SESSION
       await fetch("http://localhost:5000/admin/session", {
         method: "POST",
@@ -82,31 +82,30 @@ function Login() {
         return;
       });
       setForm({ email: "", password: "" });
-      navigate("/admin/adminNavigation")
-      } else {
-      setShow(true)
+      setTimeout(() => {
+        navigate("/admin/adminNavigation");
+      }, 3000);
+    } else {
+      setShowError(true)
+      setTimeout(() => {
+        setShowError(false);
+      }, 5000);
     }
-    
   }
-
-  // useEffect(() => {
-  //   if (isConnected) {
-  //     const timer = setTimeout(() => {
-  //       window.location.reload();
-  //     }, 500);
-
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [isConnected]);
-
 
   // This following section will display the form that takes the input from the user.
   return (
     <div>
-      <Alert variant="danger" show={show} onClose={() => setShow(false)} dismissible>
+      <Alert variant="danger" show={showError} onClose={() => setShowError(false)} dismissible>
         <Alert.Heading>Bad Email or Password</Alert.Heading>
         <p>
           Make sure you entered the right Email or Password!
+        </p>
+      </Alert>
+      <Alert variant="success" show={showSuccess} onClose={() => setShowError(false)} dismissible>
+        <Alert.Heading>Success!</Alert.Heading>
+        <p>
+          Just a moment...
         </p>
       </Alert>
       <h3>Enter Login Information</h3>

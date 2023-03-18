@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import ModalReact from './modal';
 
 const Record = (props) => (
@@ -27,7 +27,6 @@ const Record = (props) => (
 
 
 export default function RecordList() {
-  const navigate = useNavigate();
   const [records, setRecords] = useState([]);
 
   // This method fetches the records from the database.
@@ -69,7 +68,6 @@ export default function RecordList() {
         <Record
           record={record}
           deleteRecord={() => deleteRecord(record._id)}
-          // display={() => display(record._id)}
           key={record._id}
         />
       );

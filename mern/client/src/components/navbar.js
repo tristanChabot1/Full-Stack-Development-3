@@ -19,19 +19,17 @@ export default function Navbar() {
 
   useEffect(() => {
     if (location.pathname === '/admin/login' || location.pathname === '/') {
-      console.log(false)
       setShow(false);
     } else {
-      console.log(true)
       setShow(true);
     }
   }, [location]);
 
-  useEffect(() => {
-    if (!cookies.name) {
-        window.location.reload();
-    }
-  }, [cookies.name]);
+  // useEffect(() => {
+  //   if (!cookies.name) {
+  //       window.location.reload();
+  //   }
+  // }, [cookies.name]);
   
   return (
     <div>

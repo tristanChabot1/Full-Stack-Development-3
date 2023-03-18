@@ -16,8 +16,6 @@ import TransactionList from "./components/transactionList";
 import Transaction from "./components/createTransaction";
 
 
-
-
 const App = () => {
   return (
     <div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Record = (props) => (
   <tr>
@@ -40,7 +40,6 @@ export default function TransactionList() {
       return (
         <Record
           record={record}
-          // deleteRecord={() => deleteRecord(record._id)}
           key={record._id}
         />
       );
